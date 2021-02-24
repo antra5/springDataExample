@@ -6,10 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,4 +16,7 @@ public class Department {
     @GeneratedValue(generator = "department_id_seq",strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+//    @JoinColumn
+//    @OneToMany
+
 }
