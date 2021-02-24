@@ -20,9 +20,6 @@ public class DepartmentController {
 
     }
 
-    @PutMapping ("/{id}")
-    public DepartmentResponseDTO updateDepartment(@PathVariable("id") Long id, @RequestBody DepartmentRequestDTO departmentRequestDTO){
-        return departmentService.updateDepartmentById(id, departmentRequestDTO);
-    }
+
 
 }

@@ -15,7 +15,7 @@ public class Employee {
     @GeneratedValue(generator = "employee_id_seq",strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Department department;
 
 

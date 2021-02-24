@@ -8,5 +8,5 @@ import com.example.springDataExample.DTO.EmployeeResponseDTO;
 public interface DepartmentService {
 
     DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequestDTO);
-    DepartmentResponseDTO updateDepartmentById(Long id, DepartmentRequestDTO departmentRequestDTO);
+    //DepartmentResponseDTO updateDepartmentById(Long id, DepartmentRequestDTO departmentRequestDTO);
 }

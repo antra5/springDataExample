@@ -30,19 +30,20 @@ public class DepartmentServiceImpl implements DepartmentService {
         return responseDTO;
     }
 
-    @Override
-    public DepartmentResponseDTO updateDepartmentById(Long id, DepartmentRequestDTO departmentRequestDTO) {
-        Department department=new Department();
-        Optional<Department> optionalDepartment=departmentRepository.findById(id);
-        if (optionalDepartment.isPresent())
-        {
-            Department departmentFromDB= optionalDepartment.get();
-            departmentFromDB.setName(departmentRequestDTO.getName());
-            Department savedDepartment=departmentRepository.save(departmentFromDB);
-            DepartmentResponseDTO departmentResponseDTO=new DepartmentResponseDTO();
-            BeanUtils.copyProperties(savedDepartment,departmentResponseDTO);
-            return departmentResponseDTO;
-        }
-        return null;
-    }
+//    @Override
+//    public DepartmentResponseDTO updateDepartmentById(Long id, DepartmentRequestDTO departmentRequestDTO) {
+//        Department department=new Department();
+//        Optional<Department> optionalDepartment=departmentRepository.findById(id);
+//        if (optionalDepartment.isPresent())
+//        {
+//            Department departmentFromDB= optionalDepartment.get();
+//            departmentFromDB.setName(departmentRequestDTO.getName());
+//            Department savedDepartment=departmentRepository.save(departmentFromDB);
+//            DepartmentResponseDTO departmentResponseDTO=new DepartmentResponseDTO();
+//            BeanUtils.copyProperties(savedDepartment,departmentResponseDTO);
+//            return departmentResponseDTO;
+//        }
+//        return null;
+//    }
+
 }
