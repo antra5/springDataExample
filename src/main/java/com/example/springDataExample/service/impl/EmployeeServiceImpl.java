@@ -1,8 +1,11 @@
 package com.example.springDataExample.service.impl;
 
+import com.example.springDataExample.DTO.DepartmentResponseDTO;
 import com.example.springDataExample.DTO.EmployeeRequestDTO;
 import com.example.springDataExample.DTO.EmployeeResponseDTO;
+import com.example.springDataExample.entity.Department;
 import com.example.springDataExample.entity.Employee;
+import com.example.springDataExample.repository.DepartmentRepository;
 import com.example.springDataExample.repository.EmployeeRepository;
 import com.example.springDataExample.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -16,13 +19,16 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
-
+    @Autowired
+    private DepartmentRepository departmentRepository;
     @Override
     public EmployeeResponseDTO createEmployee(EmployeeRequestDTO employeeRequestDTO) {
         Employee employee=new Employee();
 
-        //
-        BeanUtils.copyProperties(employeeRequestDTO,employee);
+        Optional<Department> departmentOptional=departmentRepository.findById(employeeRequestDTO.getDepartment().getId());
+        if(departmentOptional.isPresent())
+            employee.setDepartment(departmentOptional.get());
+        //BeanUtils.copyProperties(employeeRequestDTO,employee);
 
 
         Employee savedEmployee=employeeRepository.save(employee);
@@ -30,6 +36,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         EmployeeResponseDTO responseDTO=new EmployeeResponseDTO();
         BeanUtils.copyProperties(savedEmployee,responseDTO);
+
+       // DepartmentResponseDTO departmentResponseDTO=new DepartmentResponseDTO();
+        //departmentResponseDTO.setId(savedEmployee.getDepartment().getId());
+        ///departmentResponseDTO.setName(savedEmployee.getDepartment().getName());
+
+        responseDTO.setDepartmentFromEntity(employee.getDepartment());
         return responseDTO;
     }
 
@@ -53,7 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee employeeFromDB=employeeOptional.get();
             //update DB
             employeeFromDB.setName(employeeRequestDTO.getName());
-            employeeFromDB.setDepartmentName(employeeRequestDTO.getDepartmentName());
+            Optional<Department> departmentOptional=departmentRepository.findById(employeeRequestDTO.getId());
+            if(departmentOptional.isPresent())
+                employeeFromDB.setDepartment(departmentOptional.get());
             //SAVE TO DB
             Employee savedEmployee=employeeRepository.save(employeeFromDB);
             EmployeeResponseDTO responseDTO=new EmployeeResponseDTO();
