@@ -12,13 +12,17 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
-
+    @Autowired
+    private EmployeeRepository employeeRepository;
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequestDTO) {
         Department department=new Department();
@@ -50,5 +54,32 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Department getDepartmentById(Long id) {
         return departmentRepository.findById(id).get();
+    }
+
+    @Override
+    @Transactional
+    public DepartmentResponseDTO updateDepartment(Long departmentId, DepartmentRequestDTO departmentRequestDTO) {
+        Department department=departmentRepository.findById(departmentId).get();
+        List<Employee> employeeList=employeeRepository.findByDepartment_Id(departmentId);
+        //update department
+        department.setName(departmentRequestDTO.getName());
+        Department savedDepartment=departmentRepository.save(department);
+
+//        if(departmentId!=null)
+//        {
+//            throw new RuntimeException("My error!");
+//        }
+
+        //append department code to employee code
+        employeeList.forEach(employee -> {
+            employee.setCode(departmentRequestDTO.getDepartmentCode());
+        });
+        employeeRepository.saveAll(employeeList);
+
+
+        DepartmentResponseDTO responseDTO=new DepartmentResponseDTO();
+        BeanUtils.copyProperties(savedDepartment,responseDTO);
+        return responseDTO;
+
     }
 }
