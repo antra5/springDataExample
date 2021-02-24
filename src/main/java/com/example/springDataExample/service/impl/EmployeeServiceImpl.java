@@ -36,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         else
         {
             Department department=new Department();
-            department.setName(employeeRequestDTO.getName());
+            department.setName(employeeRequestDTO.getDepartment().getName());
             employee.setDepartment(department);
 
         }
