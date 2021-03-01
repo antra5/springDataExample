@@ -5,6 +5,9 @@ import com.example.springDataExample.DTO.DepartmentResponseDTO;
 import com.example.springDataExample.DTO.EmployeeRequestDTO;
 import com.example.springDataExample.DTO.EmployeeResponseDTO;
 import com.example.springDataExample.entity.Department;
+import com.example.springDataExample.entity.Employee;
+
+import java.util.List;
 
 public interface DepartmentService {
 
@@ -13,4 +16,8 @@ public interface DepartmentService {
     Department getDepartmentById(Long id);
 
     DepartmentResponseDTO updateDepartment(Long departmentId, DepartmentRequestDTO departmentRequestDTO);
+
+    List<EmployeeResponseDTO> findMostExperiencedInDept(Long departmentId);
+
+    List<DepartmentResponseDTO> findMostExperiencedDept();
 }

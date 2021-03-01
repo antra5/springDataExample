@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -34,21 +35,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return responseDTO;
     }
 
-//    @Override
-//    public DepartmentResponseDTO updateDepartmentById(Long id, DepartmentRequestDTO departmentRequestDTO) {
-//        Department department=new Department();
-//        Optional<Department> optionalDepartment=departmentRepository.findById(id);
-//        if (optionalDepartment.isPresent())
-//        {
-//            Department departmentFromDB= optionalDepartment.get();
-//            departmentFromDB.setName(departmentRequestDTO.getName());
-//            Department savedDepartment=departmentRepository.save(departmentFromDB);
-//            DepartmentResponseDTO departmentResponseDTO=new DepartmentResponseDTO();
-//            BeanUtils.copyProperties(savedDepartment,departmentResponseDTO);
-//            return departmentResponseDTO;
-//        }
-//        return null;
-//    }
 
 
     @Override
@@ -81,5 +67,44 @@ public class DepartmentServiceImpl implements DepartmentService {
         BeanUtils.copyProperties(savedDepartment,responseDTO);
         return responseDTO;
 
+    }
+
+    @Override
+    public List<EmployeeResponseDTO> findMostExperiencedInDept(Long departmentId) {
+        List<EmployeeResponseDTO> departmentResponseDTOList=new ArrayList<>();
+        List<Employee> departmentEmployeeList=employeeRepository.findMostExperiencedEmployeesDept(departmentId);
+        for(Employee employee:departmentEmployeeList)
+        {
+            EmployeeResponseDTO responseDTO= new EmployeeResponseDTO();
+            BeanUtils.copyProperties(employee,responseDTO);
+            responseDTO.setDepartmentFromEntity(employee.getDepartment());
+            departmentResponseDTOList.add(responseDTO);
+        }
+        return departmentResponseDTOList;
+    }
+
+    @Override
+    public List<DepartmentResponseDTO> findMostExperiencedDept() {
+        //List<Department> departmentList = departmentRepository.getMostExperiencedDepartmentList();
+        List<DepartmentResponseDTO> response = new ArrayList<>();
+        Map<Department,Integer> DepartmentExperience=new HashMap<Department,Integer>();
+        for(Department department: departmentRepository.findAll()) {
+            Map.put(DepartmentExperience, employeeRepository.getTotalExperience(department.getId()));
+
+
+        }
+
+
+//        for(Department department : departmentList){
+//            List<Employee> employeeList = employeeRepository.getEmployeeListByNativeQuery(department.getId());
+//            DepartmentJoinEmployeeResponseDto responseDto = new DepartmentJoinEmployeeResponseDto();
+//            responseDto.setDepartmentName(department.getDName());
+//            responseDto.setEmployeeList(employeeList);
+//            responseDto.setId(department.getId());
+//            responseDto.setTotalSumOfYearOfExperience(employeeRepository.getTotalSumOfExperience(department.getId()));
+//            responseDtoList.add(responseDto);
+//        }
+
+        return response;
     }
 }

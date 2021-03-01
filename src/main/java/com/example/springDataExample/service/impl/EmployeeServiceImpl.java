@@ -11,6 +11,7 @@ import com.example.springDataExample.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -127,5 +128,20 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeResponseDTOList.add(responseDTO);
         }
         return employeeResponseDTOList;
+    }
+
+    @Override
+    public List<EmployeeResponseDTO> getMostExperiencedEmployee() {
+        List<EmployeeResponseDTO> employeeResponseDTOList=new ArrayList<>();
+        List<Employee> employeeList=employeeRepository.findMostExperiencedEmployees();
+        for(Employee employee:employeeList)
+        {
+            EmployeeResponseDTO responseDTO=new EmployeeResponseDTO();
+            BeanUtils.copyProperties(employee,responseDTO);
+            responseDTO.setDepartmentFromEntity(employee.getDepartment());
+            employeeResponseDTOList.add(responseDTO);
+        }
+        return employeeResponseDTOList;
+
     }
 }
