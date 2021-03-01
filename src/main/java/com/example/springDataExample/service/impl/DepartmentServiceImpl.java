@@ -85,11 +85,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<DepartmentResponseDTO> findMostExperiencedDept() {
-        //List<Department> departmentList = departmentRepository.getMostExperiencedDepartmentList();
-        List<DepartmentResponseDTO> response = new ArrayList<>();
-        Map<Department,Integer> DepartmentExperience=new HashMap<Department,Integer>();
-        for(Department department: departmentRepository.findAll()) {
-            Map.put(DepartmentExperience, employeeRepository.getTotalExperience(department.getId()));
+        List<Department> departmentList = departmentRepository.findDepartmentWithMaxExperience();
+        List<DepartmentResponseDTO> departmentResponseDTOS = new ArrayList<>();
+        for(Department  department: departmentList){
+            DepartmentResponseDTO responseDTO = new DepartmentResponseDTO();
+            BeanUtils.copyProperties(department,responseDTO);
+            departmentResponseDTOS.add(responseDTO);
+        }
+        return departmentResponseDTOS;
 
 
         }
@@ -105,6 +108,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 //            responseDtoList.add(responseDto);
 //        }
 
-        return response;
-    }
+       // return response;
+
 }
